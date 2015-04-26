@@ -1,0 +1,47 @@
+<html>
+<head>
+	<!--Para usar necesitamos hacer el import de la siguiente manera -->
+	<script type="text/javascript" src='phaser.min.js'></script>
+	<title></title>
+</head>
+ <script type="text/javascript">
+ 	var game = new Phaser.Game(800,600,Phaser.AUTO,'',{create:create,preload:preload,update:update});
+ 	var rects ;
+ 	var direction = 1;
+
+
+ 	function create(){
+ 		//un grupo es un gran contenedor donde podemos almacenar varios elementps
+ 		rects = game.add.group();
+ 		var col = 0;
+		var row = -1;
+		for(var i=0;i<50;i++){
+			var rect = game.add.graphics(0,0);
+			rect.beginFill(Math.random()*0xFF00FF);
+			rect.drawRect(0,0,50,50);
+			rect.endFill();
+			col = i % 10;
+			if(col==0){
+				row++;
+			}
+			rect.x = col *(rect.width+10);
+			rect.y = row*(rect.height+10);
+			rects.add(rect);
+		}
+ 		
+ 	}
+
+ 	function update(){
+ 		if(rects.x  >=game.width-rects.width || rects.x<0){
+ 			direction*=-1;
+ 		}
+ 		rects.x += 5 *direction;
+ 	}
+
+ 	function preload(){
+
+ 	}
+
+ </script>
+</body>
+</html>

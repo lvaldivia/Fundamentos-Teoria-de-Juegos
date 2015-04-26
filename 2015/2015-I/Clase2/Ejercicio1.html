@@ -1,9 +1,46 @@
 <html>
 <head>
-	<title>
-	</title>
+	<title></title>
+	<!--Para usar necesitamos hacer el import de la siguiente manera -->
+	<script type="text/javascript" src='phaser.min.js'></script>
 </head>
 <body>
+ <script type="text/javascript">
+ 	var game = new Phaser.Game(800,600,Phaser.AUTO,'',{create:create,preload:preload,update:update});
 
+
+ 	function create(){
+
+ 		var triangle = game.add.graphics(0,0);
+		triangle.beginFill(0x0FF0000);
+		triangle.moveTo(0,0);
+		triangle.lineTo(200,0);
+		triangle.lineTo(0,200);
+		triangle.lineTo(0,0);
+		triangle.endFill();
+
+		var hexagono = game.add.graphics(0,0);
+		hexagono.beginFill(0x00FF00);
+		hexagono.moveTo(100,0);
+		hexagono.lineTo(200,0);
+		hexagono.lineTo(300,100);
+		hexagono.lineTo(200,200);
+		hexagono.lineTo(100,200);
+		hexagono.lineTo(0,100);
+		hexagono.lineTo(100,0);
+		hexagono.endFill();
+		hexagono.x = 250;
+ 		
+ 	}
+
+ 	function update(){
+ 		
+ 	}
+
+ 	function preload(){
+
+ 	}
+
+ </script>
 </body>
 </html>
