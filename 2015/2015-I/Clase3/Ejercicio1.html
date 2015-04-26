@@ -1,0 +1,35 @@
+<html>
+<head>
+	<script type="text/javascript" src="phaser.min.js"></script>
+	<title></title>
+</head>
+<body>
+<script type="text/javascript">
+	window.onload = function(){
+		var game = new Phaser.Game(800,600,Phaser.AUTO,'',{preload:preload,update:update,create:create});
+		var invader;
+
+		function preload(){
+			//si queremos cargar assets para nuestros juegos llamamos al metodo game.load.image
+			//el primer parametro es el key con que llamamos a nuestro asset en el juego
+			//el segundo es la ruta de donde esta jalando el asset
+			game.load.image('invader','assets/invader.png');
+		}
+
+		function create(){
+			//para crearlo llamamos al metodo game.add.sprite
+			//primer y segundo parametro posicion dentro del juego
+			//tercer parametro key del objeto que vamos a crear
+			invader = game.add.sprite(0,0,'invader');
+		}
+
+		function update(){
+			if(invader.x >=game.width){
+				invader.x = -invader.width;
+			}
+			invader.x+=5;
+		}
+	};
+</script>
+</body>
+</html>

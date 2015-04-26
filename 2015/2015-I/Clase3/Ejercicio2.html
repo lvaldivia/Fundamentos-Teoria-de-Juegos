@@ -1,0 +1,87 @@
+<html>
+<head>
+	<script type="text/javascript" src="phaser.min.js"></script>
+	<title></title>
+</head>
+<body>
+<script type="text/javascript">
+	window.onload = function(){
+		var game = new Phaser.Game(800,600,Phaser.AUTO,'',{preload:preload,update:update,create:create});
+		
+		var timer;
+		var total = 0;
+		var aim;
+		var speed= 0.05;
+
+		function preload(){
+			game.load.image('invader','assets/invader.png');
+			game.load.image('aim','assets/Target.png');
+		}
+
+		function create(){
+			//dentro de los juegos existen los timers que son estructuras que por intervalos ejecutan una funcion
+			//el tiempo esta en milisegundos 1s = 1000ms
+			timer = game.time.events.loop(1000,createInvader);
+			var bg = game.add.graphics(0,0);
+			bg.beginFill(0xFFFFF);
+			bg.drawRect(0,0,game.width,game.height);
+			bg.endFill();
+			aim = game.add.sprite(0,0,'aim');
+			aim.scale.setTo(0.5,0.5);
+			//por defecto el punto de referencia de todos los elementos esta en la esquina superior izquierda
+			//para cambiarla llamamos a la propiedad anchor
+			// trabaja de 0 a 1, es como un porcentaje
+			aim.anchor.setTo(0.5,0.5);
+			//para ocultar el cursor del mouse llamamos a este metodo
+			game.canvas.style.cursor = 'none';
+		}
+
+		function createInvader(){
+			var invader = game.add.sprite(0,0,'invader');
+			//podemos cambiar la escala de un objeto con la propiedad scale
+			// la escala es de 0 a 1
+			invader.scale.setTo(0.5,0.5);
+			//Solo a los sprite podemos agregarle eventos de teclado
+			//para activarlos debemos llamar a la propiedad inputEnabled = true
+			invader.inputEnabled = true;
+			invader.name = Math.floor((Math.random()*3)+1);
+			//crear la funcion asociada al evento click
+			invader.events.onInputDown.add(destroy);
+			
+			invader.x = Math.random()*(game.width-invader.width);
+			invader.y = Math.random()*(game.height-invader.height);
+			total++;
+			if(total%5==0){
+				if(timer.delay>200){
+					timer.delay-=200;
+					console.log(timer.delay);
+				}
+			}
+			//el ultimo elemento en crearse siempre esta arriba de los demas
+			//como necesitamos que la mira siempre este arriba, llamamos al metodo bringToTop();
+			aim.bringToTop();
+		}
+
+		function destroy(sprite){
+			var life = sprite.name;
+			life--;
+			sprite.name = life;
+			speed += 0.15;
+			if(life==0){
+				sprite.destroy();
+			}
+		}
+
+		function update(){
+			// se puede acceder a las posicion en X e Y del mouse llamando a game.input
+			aim.x = game.input.x;
+			aim.y = game.input.y;
+			aim.rotation +=speed;
+			if(speed>0.05){
+				speed -=0.01;
+			}
+		}
+	};
+</script>
+</body>
+</html>
