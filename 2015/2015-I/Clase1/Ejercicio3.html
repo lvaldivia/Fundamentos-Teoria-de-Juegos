@@ -1,0 +1,51 @@
+<html>
+<head>
+	<title></title>
+	<!--Para usar necesitamos hacer el import de la siguiente manera -->
+	<script type="text/javascript" src='phaser.min.js'></script>
+</head>
+<body>
+ <script type="text/javascript">
+ 	var game = new Phaser.Game(800,600,Phaser.AUTO,'',{create:create,preload:preload,update:update});
+
+
+ 	function create(){
+ 		//para añadir graphics llamamos al metodo game.add.graphics
+ 		//pide dos parametros la posicion en X e Y dentro del escenario
+ 		//Tener en cuenta que el plano cartesiano en juegos es:
+ 		// x positivo derecha
+ 		// x negativo izquierda
+ 		// y positivo abajo
+ 		// y negativo arriba
+ 		var circulo = game.add.graphics(0,0);
+ 		//como es una figura simple necesita color en formato hexadecimal
+ 		// 0xRGBcode
+ 		circulo.beginFill(0x0FF000);
+ 		//llamamos al metodo drawCircle
+ 		//recibe tres parametros ejeX, ejeY y radio
+ 		circulo.drawCircle(0,0,50);
+ 		//llamamos al metodo para terminar de dibujar
+ 		circulo.endFill();
+ 		//Todo objeto tiene sus coordenadas en X e Y, las cuales podemos alterar
+ 		circulo.x = 100;
+ 		circulo.y = 50;
+
+ 		var rectangle = game.add.graphics(0,0);
+ 		rectangle.beginFill(0x0FF00FF);
+ 		//a diferencia del drawCircle, este metodo recibe 4 parametros
+ 		//ejeX, ejeY, ancho y alto
+ 		rectangle.drawRect(0,0,50,150);
+ 		rectangle.endFill();
+ 	}
+
+ 	function update(){
+ 		
+ 	}
+
+ 	function preload(){
+
+ 	}
+
+ </script>
+</body>
+</html>

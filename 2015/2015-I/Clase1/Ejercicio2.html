@@ -1,0 +1,30 @@
+<html>
+<head>
+	<title></title>
+	<!--Para usar necesitamos hacer el import de la siguiente manera -->
+	<script type="text/javascript" src='phaser.min.js'></script>
+</head>
+<body>
+ <script type="text/javascript">
+ 	//Phaser es un framework creado sobre Pixi y basado en Flixel (AS3)
+ 	// para iniciarlizar el objeto phaser 
+ 	var game = new Phaser.Game(800,600,Phaser.AUTO,'',{create:create,preload:preload,update:update});
+ 	//phaser recibe 5 parámetros (ancho, alto , CANVAS/WebGL, objeto con funciones)
+ 	// Al poner Phaser.AUTO hacemos que por dentro el framwork decida si usar canvas o WebGL
+
+
+ 	function create(){
+ 		//funcion donde construimos objetos
+ 	}
+
+ 	function update(){
+ 		//funcion de loop
+ 	}
+
+ 	function preload(){
+ 		//cuando debamos cargar assets externos los ponemos en este metodo
+ 	}
+
+ </script>
+</body>
+</html>
