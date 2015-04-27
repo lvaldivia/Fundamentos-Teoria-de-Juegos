@@ -1,0 +1,189 @@
+<html>
+<head>
+	<script type="text/javascript" src='phaser.min.js'></script>
+	<title></title>
+</head>
+<body>
+	<script type="text/javascript">
+		window.onload = function(){
+			var game = new Phaser.Game(800,600,Phaser.AUTO,'',{preload:preload,update:update,create:create});
+			var ship;
+			var leftKey;
+			var rightKey;
+			var spaceKey;
+			var bullets;
+			var invaders;
+			var bulletTime = 0;
+			var direction = 1;
+			var menu;
+			var btnStart;
+			var explosions;
+
+			function create(){
+
+				showMenu();
+			}
+
+			function showMenu(){
+				menu = game.add.image(0,0,'bgWelcome');
+				menu.width = game.width;
+				menu.height = game.height;
+				menu.y = -menu.height;
+				var tween = game.add.tween(menu).to({y:0},1000,Phaser.Easing.Linear.None);
+				tween.start();
+				tween.onComplete.add(showButtons);
+				btn = game.add.button(0,0,'start_button',startGame);
+				btn.anchor.setTo(0.5,0.5);
+				btn.alpha =0;
+			}
+
+			function startGame(){
+				var start = game.add.tween(btn).to({alpha:0},500);
+				start.onComplete.add(removeBtn);
+				start.start();
+				var bg = game.add.tween(menu).to({y:-menu.height},500);
+				bg.start();
+				bg.onComplete.add(removeBg);
+			}
+
+			function removeBg(){
+				menu.destroy();
+			}
+
+			function removeBtn(){
+				btn.destroy();
+				initGame();
+			}
+
+			function showButtons(){
+				btn.alpha = 1;
+				btn.x = game.width/2;
+				btn.y = game.height/2;
+			}
+
+			function initGame(){
+				createInvaders();
+				createShip();
+				initKeys();
+				createBullets();
+			}
+
+			function createBullets(){
+				bullets = game.add.group();
+				bullets.createMultiple(30,'bullet');
+				bullets.setAll('anchor.x', 0.5);
+    			bullets.setAll('anchor.y', 1);
+				bullets.setAll('checkWorldBounds',true);
+				bullets.setAll('outOfBoundsKill',true);
+				bullets.enableBody = true;
+				game.physics.enable(bullets,Phaser.Physics.ARCADE);
+				explosions = game.add.group();
+				explosions.createMultiple(30,'explode');
+				explosions.forEach(setupExplode);
+			}
+
+			function setupExplode(explode){
+				explode.anchor.x = 0.5;
+				explode.anchor.y = 0.5;
+				explode.animations.add('explode');
+			}
+
+			function initKeys(){
+				leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+				rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+				spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+			}
+
+			function createShip(){
+				ship = game.add.sprite(0,0,'ship');
+				game.physics.enable(ship, Phaser.Physics.ARCADE);
+				ship.anchor.setTo(0.5,0.5);
+				ship.x = game.width/2;
+				ship.y = game.height-(ship.height/2);
+			}
+
+			function createInvaders(){
+				invaders = game.add.group();
+				var column = 0;
+				var row = -1;
+				for(var i=0;i<50;i++){
+					console.log('aaa');
+					var sprite = game.add.sprite(0,0,'invader');
+					column = i %10;
+					sprite.width = 64;
+					sprite.height = 64;
+					sprite.x = (sprite.width+10)*column;
+					if(column==0){
+						row++;
+					}
+					sprite.y = (sprite.height+10)*row;
+					invaders.add(sprite);
+					invaders.enableBody = true;
+					invaders.setAll('anchor.x', 0.5);
+					game.physics.enable(invaders,Phaser.Physics.ARCADE);
+				}
+			}
+
+			function preload(){
+				game.load.image('invader','assets/Space_Invaders_by_maleiva.jpg');
+				game.load.image('ship','assets/xattackJS1.jpg');
+				game.load.image('bullet','assets/bullet.png');
+				game.load.image('bgWelcome','assets/bgWelcome.jpg');
+				game.load.image('bgLayer1','assets/bgLayer1.jpg');
+				game.load.image('start_button','assets/start_button.png');
+				game.load.spritesheet('explode','assets/explode.png',128,128);
+			}
+
+			function shoot(){
+				if(game.time.now>bulletTime){
+					bulletTime = game.time.now+200;
+					var currentBullet = bullets.getFirstExists(false);
+					if(currentBullet){
+						currentBullet.reset(ship.x,ship.y);
+						currentBullet.body.velocity.y =-200;
+					}
+				}
+			}
+
+			function update(){
+				if(ship){
+					ship.body.velocity.setTo(0, 0);	
+					console.log(ship.key);
+					if(leftKey.isDown){
+						ship.body.velocity.x = -200;
+						if(ship.x<ship.width/2){
+							ship.x = ship.width/2;
+						}
+					}
+					if(rightKey.isDown){
+						ship.body.velocity.x = +200;
+						if(ship.x>game.width-(ship.width/2)){
+							ship.x = game.width-(ship.width/2);
+						}
+					}
+					if(spaceKey.isDown){
+						shoot();
+					}
+					if(invaders.x > game.width-invaders.width){
+						direction *=-1;
+					}
+					if(invaders.x<0){
+						direction *=-1;	
+					}
+					invaders.x += 1 *direction;
+					game.physics.arcade.overlap(bullets, invaders, collisionHandler, null, this);
+				}
+			}
+
+			function collisionHandler(bullet, invader){
+				invader.kill();
+				bullet.kill();
+
+				var explosion = explosions.getFirstExists(false);
+   				explosion.reset(invader.body.x, invader.body.y);
+   				explosion.play('explode', 30, false, true);
+			}
+		}
+	</script>
+</body>
+</html>

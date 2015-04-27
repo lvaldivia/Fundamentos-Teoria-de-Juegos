@@ -1,0 +1,75 @@
+<html>
+<head>
+<title></title>
+<script type="text/javascript" src="phaser-2.2.2/build/phaser.min.js"></script>
+</head>
+
+<body>
+<div style="width:800px;margin: 0 auto;" id="container"></div>
+<script type="text/javascript">
+	window.onload = function(){
+		var game = new Phaser.Game(800,600,Phaser.AUTO,'container',{update:update,create:create,preload:preload});
+		var total = 0;
+		var timer;
+		
+
+		function preload(){
+			game.load.image('invader','assets/invader.png');
+			game.load.image('aim','assets/Target.png');
+		}
+
+		function create(){
+			timer = game.time.create(false);
+			//timer.add(500,printMessage,this);
+			//timer.repeat(1000,2,repeat,this);
+			//timer.onComplete.add(endTimer);
+			timer.loop(1000, updateTimer,this);
+			timer.start();
+		}
+
+		function updateTimer(){
+			var image = game.add.sprite(0,0,'invader');
+			image.width = image.height = 64;
+			image.x = Math.random()*(game.width-image.width);
+			image.y = Math.random()*(game.height-image.height);
+			total++;
+			if(total%3==0){
+				image.tint = Math.random()*0x00FFF0;
+				image.name = 'tint';
+			}else{
+				image.name = 'normal';
+			}
+			image.inputEnabled = true;
+			image.events.onInputDown.add(destroy);
+			image.scale.setTo(0.5,0.5);
+		}
+
+		function destroy(sprite){	
+			if(sprite.name == 'tint'){	
+				sprite.destroy();
+			}
+		}
+
+		function endTimer(){
+			console.log("enTimer");
+		}
+
+		function repeat(){
+			console.log("repeat");
+		}
+
+		function printMessage(){
+			console.log('print message');
+		}
+
+		
+		function update(){
+			
+		}
+
+	};
+
+</script>
+
+</body>
+</html>
