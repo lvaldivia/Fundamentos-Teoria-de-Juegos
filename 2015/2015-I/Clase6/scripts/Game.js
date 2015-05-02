@@ -4,6 +4,9 @@ Game = function(game){
 	this.monster = null;
 	this.timeCreated = 0;
 	this.candyGroup =null;
+	this.textScore = null;
+	this.score = 0;
+	this.fontStyle = null;
 }
 
 Game.prototype = {
@@ -18,6 +21,8 @@ Game.prototype = {
 		this.monster.play('idle',10,true);
 		this.monster.y = this.floor.y-50;
 		this.candyGroup = this.add.group();
+		this.fontStyle = {font:'40px Arial',fill:'#FFCC00',stroke: "#333", strokeThickness: 5};
+		this.textScore = this.add.text(0,0,'0',this.fontStyle);
 	},
 	update:function(){
 		this.timeCreated += this.time.elapsed;
@@ -31,11 +36,17 @@ Game.prototype = {
 			this.physics.enable(candy, Phaser.Physics.ARCADE);
 			candy.checkWorldBounds = true;
 			candy.inputEnabled = true;
+			candy.rotateMe = (Math.random()*4)-2;
 			candy.events.onInputDown.add(this.destroy,this);
 			candy.events.onOutOfBounds.add(this.lose,this);
 		}
+		this.candyGroup.forEach(function(candy){
+			candy.angle += candy.rotateMe;
+		});
 	},
 	destroy:function(sprite){
+		this.score++;
+		this.textScore.text = this.score;
 		sprite.kill();
 	},
 	lose:function(sprite){
