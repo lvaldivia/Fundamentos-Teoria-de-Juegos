@@ -1,0 +1,31 @@
+Preloader = function(game){
+	this.loadingBar = null;
+	Global = {WIDTH:1024,HEIGHT:768};
+}
+
+Preloader.prototype = {
+	preload:function(){
+		this.loadingBar = this.add.sprite(0,0,'loading');
+		this.loadingBar.anchor.setTo(0.5,0.5);
+		this.loadingBar.x = Global.WIDTH/2;
+		this.loadingBar.y = Global.HEIGHT/2;
+		this.load.setPreloadSprite(this.loadingBar);
+
+		this.load.audio('game','sounds/bgGame.mp3');
+		this.load.image('bgLayer1','img/bgLayer1.png');
+		this.load.image('bgLayer2','img/bgLayer2.png');
+		this.load.image('bgLayer3','img/bgLayer3.png');
+		this.load.image('bgLayer4','img/bgLayer4.png');
+		this.load.image('bgWelcome','img/bgWelcome.jpg');
+		this.load.spritesheet('candy','img/candy.png',82,98);
+		this.load.spritesheet('hero','img/hero.png',155,77);
+		this.load.image('welcome_aboutButton','img/welcome_aboutButton.png');
+		this.load.image('welcome_hero','img/welcome_hero.png');
+		this.load.image('welcome_playButton','img/welcome_playButton.png');
+		this.load.image('welcome_title','img/welcome_title.png');
+		
+	},
+	create:function(){
+		this.state.start('Menu');
+	}
+}
