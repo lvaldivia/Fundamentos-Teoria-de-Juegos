@@ -5,11 +5,16 @@ Menu = function(game){
 	this.cover = null;
 	this.aboutBtn = null;
 	this.hero =null;
+	this.sound = null;
 }
 
 Menu.prototype = {
 	create:function(){
 		this.bg = this.add.sprite(0,0,'bgWelcome');
+		this.sound = this.add.sound('welcome',1,true);
+		this.sound.onPlay.add(this.startSound,this);
+		this.sound.onLoop.add(this.onLoop,this);
+		this.sound.play();
 		this.title = this.add.sprite(0,0,'welcome_title');
 		this.title.x = Global.WIDTH-(this.title.width+50);
 		this.btnStart = this.add.button(0,0,'welcome_playButton',this.startGame,this);
@@ -24,6 +29,12 @@ Menu.prototype = {
 		tween.onComplete.add(this.moveUp,this);
 		tween.start();
 	},
+	onLoop:function(){
+		console.log('loop');
+	},
+	startSound:function(){
+		console.log('sonido start');
+	},
 	moveUp:function(){
 		var tween = this.add.tween(this.hero).to({y:0},1000);
 		tween.onComplete.add(this.moveDown,this);
@@ -35,6 +46,7 @@ Menu.prototype = {
 		tween.start();
 	},
 	startGame:function(){
+		this.sound.stop();
 		this.state.start('Game');
 	}
 }

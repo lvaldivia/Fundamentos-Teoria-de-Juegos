@@ -12,10 +12,10 @@ Preloader.prototype = {
 		this.load.setPreloadSprite(this.loadingBar);
 
 		this.load.audio('game','sounds/bgGame.mp3');
+		this.load.audio('welcome','sounds/bgWelcome.mp3');
 		this.load.image('bgLayer1','img/bgLayer1.png');
 		this.load.image('bgLayer2','img/bgLayer2.png');
 		this.load.image('bgLayer3','img/bgLayer3.png');
-		this.load.image('bgLayer4','img/bgLayer4.png');
 		this.load.image('bgWelcome','img/bgWelcome.jpg');
 		this.load.spritesheet('candy','img/candy.png',82,98);
 		this.load.spritesheet('hero','img/hero.png',155,77);
