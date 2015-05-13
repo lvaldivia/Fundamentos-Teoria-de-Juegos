@@ -9,6 +9,7 @@ Game = function(game){
 	this.elapsed = 0;
 	this.direction = 1;
 	this.lifeBar = null;
+	this.darken = false;
 }
 
 Game.prototype = {
@@ -71,13 +72,11 @@ Game.prototype = {
 
 		this.elapsed+= this.time.elapsed;
 		if(this.elapsed>2000){
-			if(this.rect.alpha<0.5){
-				this.direction = 1;
-			}else{
-				this.direction = -1;
+			if(!this.darken){
+				this.darken = true;
+				var tween = this.add.tween(this.rect).to({alpha:0.5},1000);
+				tween.start();
 			}
-			this.rect.alpha += this.direction*0.1;
-			this.elapsed = 0;
 		}
 		
 		if(this.timeCreateCandy>1000){
