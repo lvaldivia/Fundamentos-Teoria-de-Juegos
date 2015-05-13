@@ -75,6 +75,13 @@ Game.prototype = {
 			if(!this.darken){
 				this.darken = true;
 				var tween = this.add.tween(this.rect).to({alpha:0.5},1000);
+				// que pasa si queremos pasar varios parametros al tween complete
+				// debemos hacer este pequeño truco, este tipo de function se llama funcion
+				//anomica no tiene un nombre pero si una definicion
+				//dentro de esa funcion llamaos a la funcion que queremos ejecutar
+				tween.onComplete.add(function(){
+					this.tweenOver(this.rect, 15, 50, 'Hola');
+				},this);
 				tween.start();
 			}
 		}
@@ -98,6 +105,9 @@ Game.prototype = {
 		this.candyGroup.forEach(function(candy){
 			candy.angle += candy.rotateMe;
 		});
+	},
+	tweenOver:function(sprite, param1, param2, param3){
+		console.log(sprite + ' ' + param1 + ' ' + param2 + ' ' +param3);
 	},
 	collisionHandler:function(sp1,sp2){
 		sp1.currentLife--;
