@@ -1,13 +1,8 @@
 Game = function(game){
-	this.land = null;
-	this.tank = null;
-	this.canon = null;
-	this.keys = null;
 	this.speed =0;
 	this.fireRate = 100;
 	this.tanks = [];
-	this.bullets = null;this.nextFire  = 0;
-        this.enemyBullets = null;
+	this.bullets = null;
 }
 
 Game.prototype ={
@@ -81,17 +76,9 @@ Game.prototype ={
 		this.canon.y= this.tank.y;
 		this.land.tilePosition.x = -this.camera.x;
 		this.land.tilePosition.y = -this.camera.y;
-		for(var i=0;i < this.tanks.length;i++){
-			this.tanks[i].update();
-			this.physics.arcade.collide(this.tank, this.tanks[i].tank);
-			this.physics.arcade.overlap(this.bullets,this.tanks[i].tank,null,this.hitEnemy,this);
-		}
 
 	},
 
-	hitEnemy:function(bullet,tank){
-		
-	},
 
 	fire:function(){
 		if (this.time.now > this.nextFire)
