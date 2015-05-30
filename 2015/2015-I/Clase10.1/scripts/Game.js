@@ -2,6 +2,7 @@ Game = function(game){
 	this.speed =0;
 	this.fireRate = 100;
 	this.tanks = [];
+	this.nextFire = 0;
 	this.bullets = null;
 }
 
@@ -14,6 +15,8 @@ Game.prototype ={
 		this.tank.anchor.setTo(0.5,0.5);
 		this.tank.x = 400;
 		this.tank.y = 300;
+		this.tank.life = 5;
+		this.tank.is_dead = false;
 		
 		this.physics.enable(this.tank,Phaser.Physics.ARCADE);
 		this.tank.body.collideWorldBounds = true;
@@ -77,6 +80,31 @@ Game.prototype ={
 		this.land.tilePosition.x = -this.camera.x;
 		this.land.tilePosition.y = -this.camera.y;
 
+		for(var i = 0;i<this.tanks.length;i++){
+			this.tanks[i].update();
+			this.physics.arcade.collide(this.tank,this.tanks[i].tank);
+			this.physics.arcade.overlap(this.bullets,this.tanks[i].tank,
+							this.hitEnemy,null,this);
+		}
+		this.physics.arcade.overlap(this.enemyBullets, 
+									this.tank,this.hitPlayer, null, this);
+
+	},
+	hitPlayer:function(tank ,bullet){
+		tank.life --;
+		if(tank.life == 0){
+			tank.kill();
+			this.canon.kill();
+			tank.is_dead = true;
+			//this.shadow.kill();
+		}
+		bullet.kill();
+
+	},
+
+	hitEnemy:function(tank, bullet){
+		bullet.kill();
+		this.tanks[tank.name]._kill();
 	},
 
 

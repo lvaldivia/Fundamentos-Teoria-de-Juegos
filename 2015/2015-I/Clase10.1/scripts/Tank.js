@@ -21,14 +21,43 @@ Tank = function(index,game, player,bullets){
     this.turret.anchor.set(0.3, 0.5);
 
     this.tank.name = index.toString();
-    this.tank.index = index;
-    game.physics.enable(this.tank, Phaser.Physics.ARCADE);
+    this.game.physics.enable(this.tank, Phaser.Physics.ARCADE);
     this.tank.body.immovable = false;
     this.tank.body.collideWorldBounds = true;
     this.tank.body.bounce.setTo(1, 1);
 
-    //this.tank.angle = game.rnd.angle();
+    this.tank.angle = game.rnd.angle();
+    this.game.physics.arcade.velocityFromRotation(this.tank.rotation,100, this.tank.body.velocity)
 
-}
+};
+Tank.prototype._kill = function(){
+    this.tank.kill();
+    this.shadow.kill();
+    this.turret.kill();
+};
+Tank.prototype.update = function(){
+    this.shadow.x= this.tank.x;
+    this.shadow.y = this.tank.y;
+    this.turret.x = this.tank.x;
+    this.turret.y = this.tank.y;
+    this.shadow.rotation = this.tank.rotation;
+    if(!this.player.is_dead){
+        this.turret.rotation = this.game.physics.arcade.angleBetween(this.turret,this.player);
+        if(this.game.physics.arcade.distanceBetween(this.tank, this.player) < 300){
+            if(this.game.time.now > this.nextFire && 
+                this.bullets.countDead()>0){
+                this.nextFire = this.game.time.now+ this.fireRate;
+                var bullet = this.bullets.getFirstDead();
+                bullet.reset(this.turret.x, this.turret.y);
+                bullet.rotation = this.game.physics.arcade.moveToObject(bullet, this.player, 500);
+            }
+        }
+    }
+
+};
+
+
+
+
 
 
