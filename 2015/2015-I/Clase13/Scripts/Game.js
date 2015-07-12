@@ -7,6 +7,8 @@ Game.prototype={
 		this.RUNNING_SPEED = 180;
     	this.JUMPING_SPEED = 500;
     	this.BOUNCING_SPEED = 150;
+    	this.score = 0;
+    	this.dead = 0;
 	},
 	create:function(){
 		this.loadLevel();
@@ -103,6 +105,9 @@ Game.prototype={
 	{
 		this.game.physics.arcade.collide(this.player, this.collisionLayer);
 		this.game.physics.arcade.collide(this.enemies, this.collisionLayer);
+
+		this.game.physics.arcade.collide(this.player,
+			this.enemies,this.hitEnemy,null,this);
 		this.player.body.velocity.x = 0;
 	    if(this.keys.left.isDown || this.player.customParams.isMovingLeft) {
 	      this.player.body.velocity.x = -this.RUNNING_SPEED;
@@ -123,7 +128,20 @@ Game.prototype={
 	      this.player.body.velocity.y = -this.JUMPING_SPEED;
 	      this.player.customParams.mustJump = false;
 	    }
-
+	},
+	hitEnemy:function(player,enemy){
+		if(enemy.body.touching.up){
+			enemy.kill();
+			player.body.velocity.y = - this.BOUNCING_SPEED;
+			this.score++;
+		}
+		if(this.score == 2){
+			console.log('grabamos score');
+			var posting = $.post('save.php',{'score':this.score});
+			posting.done(function(data){
+				console.log(data);
+			});
+		}
 	},
 	findObjectsByType:function(target, tilemap, layer){
 		var result = [];

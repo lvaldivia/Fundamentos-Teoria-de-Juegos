@@ -32,7 +32,6 @@ Enemy.prototype.update = function(){
 	var nextTile = this.tilemap.getTileWorldXY(nextX,nextY
 		,this.tilemap.tileWidth, 
 		this.tilemap.tileHeight,'collisionLayer');
-	console.log(nextTile);
 	if(!nextTile && this.body.blocked.down){
 		this.body.velocity.x *=-1;
 	}
