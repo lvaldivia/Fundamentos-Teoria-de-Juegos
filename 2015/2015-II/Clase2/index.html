@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script type="text/javascript" src="phaser.min.js"></script>
+	<script type="text/javascript" src="Boot.js"></script>
+	<script type="text/javascript" src="Preload.js"></script>
+	<script type="text/javascript" src="Menu.js"></script>
+	<script type="text/javascript" src='Game.js'></script>
+</head>
+<body>
+<script type="text/javascript">
+	var game = new Phaser.Game(320, 480, Phaser.AUTO,'');
+	game.state.add("Boot",Boot);
+	game.state.add('Preload',Preload);
+	game.state.add('Menu',Menu);
+	game.state.add('Game',Game);
+	game.state.start("Boot");
+
+
+</script>
+</body>
+</html>
