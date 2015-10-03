@@ -7,6 +7,14 @@
 	<script type="text/javascript" src="Preload.js"></script>
 	<script type="text/javascript" src="Menu.js"></script>
 	<script type="text/javascript" src='Game.js'></script>
+	<script type="text/javascript" src='GameOver.js'></script>
+	<style type="text/css">
+	body{
+		padding:0px;
+		margin:0px;
+		background-color: black;
+	}
+	</style>
 </head>
 <body>
 <script type="text/javascript">
@@ -15,6 +23,7 @@
 	game.state.add('Preload',Preload);
 	game.state.add('Menu',Menu);
 	game.state.add('Game',Game);
+	game.state.add('GameOver',GameOver);
 	game.state.start("Boot");
 
 

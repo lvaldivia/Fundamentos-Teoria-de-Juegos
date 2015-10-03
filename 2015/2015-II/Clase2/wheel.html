@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript" src="phaser.min.js"></script>
+	<title></title>
+</head>
+<body>
+<script type="text/javascript">
+	var game = new Phaser.Game(458,488,Phaser.AUTO,'',{update:update,preload:preload,create:create});
+
+	var wheel, pin ;
+	var slices = 8;
+	var canSpin = true;
+	var prize = 0;
+
+	var prizes = ['Llave',"50 estrellas", "500 estrellas","Perdiste","200 estrellas","100 estrellas","150 estrellas","Perdiste"];
+
+	function preload(){
+		game.load.image("wheel", "assets/wheel.png");
+		game.load.image("pin", "assets/pin.png");    
+	}
+
+	function create(){
+		wheel = game.add.sprite(game.width/2,game.height/2,'wheel');
+		wheel.anchor.setTo(0.5,0.5);
+		pin = game.add.sprite(game.width/2,game.height/2,'pin');
+		pin.anchor.setTo(0.5,0.5);
+		pin.inputEnabled = true;
+		pin.events.onInputDown.add(spinWheel,this);
+	}
+
+	function spinWheel(){
+		if(canSpin){
+			canSpin = false;
+			var rounds = game.rnd.between(2,4);
+
+			var degrees = game.rnd.between(0,360);
+
+			prize = slices -1 - 
+				Math.floor(degrees / (360/slices));
+
+			 var spinTween = game.add.tween(wheel).to({
+                    angle: 360 * rounds + degrees
+               }, 3000,Phaser.Easing.Quadratic.Out);
+               spinTween.start();
+               spinTween.onComplete.add(winPrize);
+		}
+	}
+
+	function winPrize(){
+		canSpin = true;
+		console.log(prizes[prize]);
+	}
+
+	function update(){
+
+	}
+
+</script>
+</body>
+</html>
