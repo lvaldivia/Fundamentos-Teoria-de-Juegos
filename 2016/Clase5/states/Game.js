@@ -36,7 +36,28 @@ Game.prototype = {
     this.createControls();
   },
   
-  create:function(){
+  createControls:function(){
+    this.leftButton = this.game.add.sprite(0,0,'arrowButton');
+    this.leftButton.y = this.game.height - this.leftButton.height;
+    this.leftButton.inputEnabled = true;
+    
+    this.leftButton.events.onInputDown.add(function(){
+      
+    },this);
+    
+    this.leftButton.events.onInputUp.add(function(){
+      
+    },this);
+    
+    this.rightButton = this.game.add.sprite(this.leftButton.width + 10
+                        ,0,'arrowButton');
+    this.rightButton.y = this.game.height - this.leftButton.height;
+    this.rightButton.inputEnabled = true;
+    
+    this.actionButton = this.game.add.sprite(0,0,'actionButton');
+    this.actionButton.y = this.game.height - this.actionButton.height;
+    this.actionButton.x = this.game.width - this.actionButton.width;
+    this.actionButton.inputEnabled = true;
     
   },
 

@@ -10,6 +10,10 @@ Preloader.prototype = {
     this.game.load.spritesheet("player",
                       "assets/images/player_spritesheet.png",
                       28,30,5,1,1);
+                      
+    this.game.load.image('actionButton',"assets/images/actionButton.png");
+    this.game.load.image('arrowButton',"assets/images/arrowButton.png");
+    
     
     this.game.load.text('level','assets/data/level.json');
     this.game.load.image('ground','assets/images/ground.png');
