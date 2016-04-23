@@ -17,6 +17,8 @@ Game.prototype = {
     this.player.anchor.setTo(0.5);
     this.game.physics.arcade.enable(this.player);
     this.player.body.collideWorldBounds = true;
+    
+    
 
     this.platformGroup = this.game.add.group();
     this.platformGroup.enableBody = true;
@@ -33,7 +35,17 @@ Game.prototype = {
     this.barrilGroup = this.game.add.group();
     this.elapsed = 0;
     this.barrilFrequency = this.levelData.barrelFrequency * 1000;
-    this.createControls();
+    this.player.customProps = {left:false,right:false,up:false};
+    
+    this.fires = this.game.add.group();
+    
+    this.space = this.game.input.keyboard.addKey(
+                Phaser.Keyboard.SPACEBAR);
+    
+    this.delay = 0;
+    if(!this.game.device.desktop){
+      this.createControls();  
+    }
   },
   
   createControls:function(){
@@ -42,15 +54,26 @@ Game.prototype = {
     this.leftButton.inputEnabled = true;
     
     this.leftButton.events.onInputDown.add(function(){
+      this.player.customProps.left = true;
       
     },this);
     
     this.leftButton.events.onInputUp.add(function(){
-      
+      this.player.customProps.left = false;
     },this);
     
     this.rightButton = this.game.add.sprite(this.leftButton.width + 10
                         ,0,'arrowButton');
+                        
+    this.rightButton.events.onInputDown.add(function(){
+      this.player.customProps.right = true;
+      
+    },this);
+    
+    this.rightButton.events.onInputUp.add(function(){
+      this.player.customProps.right = false;
+    },this);
+                        
     this.rightButton.y = this.game.height - this.leftButton.height;
     this.rightButton.inputEnabled = true;
     
@@ -58,6 +81,15 @@ Game.prototype = {
     this.actionButton.y = this.game.height - this.actionButton.height;
     this.actionButton.x = this.game.width - this.actionButton.width;
     this.actionButton.inputEnabled = true;
+    
+    this.actionButton.events.onInputDown.add(function(){
+      this.player.customProps.up = true;
+    },this);
+    //game.input.keyboard.addKey(Phaser.Keyboard.UP);
+    //alert(this.game.device.desktop);
+    this.actionButton.events.onInputUp.add(function(){
+      this.player.customProps.up = false;
+    },this);
     
   },
 
@@ -74,13 +106,18 @@ Game.prototype = {
           this.platformGroup);
     this.game.physics.arcade.collide(this.player,
           this.platformGroup);
-    if(this.cursors.left.isDown){
-      //this.player.x -=2;
+    
+    this.delay += this.game.time.elapsed;
+    if(this.space.isDown && this.delay >= 400){
+      this.delay = 0;
+      this.createFire();
+    }
+          
+    if(this.cursors.left.isDown || this.player.customProps.left){
       this.player.body.velocity.x = -180;
       this.player.animations.play('walking');
       this.player.scale.setTo(1,1);
-    }else if(this.cursors.right.isDown){
-      //this.player.x +=2;
+    }else if(this.cursors.right.isDown || this.player.customProps.right){
       this.player.body.velocity.x = 180;
       this.player.scale.setTo(-1,1);
       this.player.animations.play('walking');
@@ -90,7 +127,7 @@ Game.prototype = {
       this.player.frame = 3;
     }
 
-    if(this.cursors.up.isDown
+    if( (this.cursors.up.isDown || this.player.customProps.up)
       && this.player.body.touching.down){
       this.player.body.velocity.y = -550;
     }
@@ -100,6 +137,17 @@ Game.prototype = {
               element.kill();
             }
     },this);
+  },
+  createFire:function(){
+    var fire = this.game.add.sprite(this.player.x,this.player.y,
+        "fire");
+    fire.anchor.setTo(0.5);
+    this.fires.add(fire);
+    this.game.physics.arcade.enable(fire);
+    fire.body.velocity.x = 100 * -this.player.scale.x;
+    fire.body.allowGravity = false;
+    fire.checkWorldBounds = true;
+    fire.outOfBoundsKill = true;
   },
   createBarril:function(){
     var barril = this.barrilGroup.getFirstDead();

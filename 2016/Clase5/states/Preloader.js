@@ -14,7 +14,9 @@ Preloader.prototype = {
     this.game.load.image('actionButton',"assets/images/actionButton.png");
     this.game.load.image('arrowButton',"assets/images/arrowButton.png");
     
-    
+    this.game.load.spritesheet("fire",
+        "assets/images/fire_spritesheet.png",
+             20, 21, 2, 1, 1);
     this.game.load.text('level','assets/data/level.json');
     this.game.load.image('ground','assets/images/ground.png');
     this.game.load.image('platform','assets/images/platform.png');
