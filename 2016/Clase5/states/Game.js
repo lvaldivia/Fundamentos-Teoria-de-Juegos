@@ -33,6 +33,11 @@ Game.prototype = {
     this.barrilGroup = this.game.add.group();
     this.elapsed = 0;
     this.barrilFrequency = this.levelData.barrelFrequency * 1000;
+    this.createControls();
+  },
+  
+  create:function(){
+    
   },
 
   update:function(){
